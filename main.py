@@ -34,9 +34,12 @@ HELP_TEXT = (
 temp_db = {
 
 }
+
+# в качестве ключей берем id пользователей, которые позже будем сохранять в бд
 temp_executors = {
     "@bRhAdpqgfjqE": "Великородний Алексей",
-    "+7 995 262 8476": "Великородний Тимофей",
+    #"+7 995 262 8476": "Великородний Тимофей",
+    '975508686': "Великородний Тимофей"
 }
 
 
@@ -192,7 +195,7 @@ async def process_save_task_text(message: Message, state: FSMContext):
 
 # функция для назначения ответственного за задачу
 @dp.callback_query(StateFilter(FSM.create_task_person))  # , F.data.as_('nick'))
-async def process_save_task_person(callback: CallbackQuery, state: FSMContext):
+async def process_save_task_person(callback: CallbackQuery, state: FSMContext, bot: Bot):
     # Cохраняем введенное имя в хранилище по ключу "name"
     task_person = callback.data
     await state.update_data(task_person=task_person)
@@ -204,12 +207,20 @@ async def process_save_task_person(callback: CallbackQuery, state: FSMContext):
         name_ex = 'Я'
     else:
         name_ex = temp_executors[data["task_person"]]
+        # высылаем уведомление пользователю о задаче
+        await bot.send_message(
+            chat_id=task_person,
+            text=f'<b>Вам назначена новая задача</b>:\n<i>{data["task_text"]}</i>',
+            parse_mode='HTML'
+        )
+
     await callback.message.edit_text(
             text=f'В качестве исполнителя выбран: {name_ex}',
         )
+    #<a href="tg://user?id={message.from_user.id}">{message.from_user.full_name}</a>
     await callback.message.answer(
         text=f'<b>Создана новая задача</b>: \n<i>{data["task_text"]}</i>\n\n'
-        f'<b>Назначена</b>:\n<i>{task_person}</i>',
+        f'<b>Назначена</b>:\n<i><a href="tg://user?id={task_person}">{name_ex}</a></i>',
         parse_mode='HTML',
         reply_markup=get_keyboard_with_main_menu()
     )

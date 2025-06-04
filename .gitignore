@@ -1,4 +1,10 @@
 venv
+.venv/
 .env
 config_data/__pycache__
 __pycache__/
+.vscode/
+.DS_Store
+.redis_data/
+.postgres_data/
+.pgadmin_data/

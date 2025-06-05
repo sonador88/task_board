@@ -51,7 +51,7 @@ async def main():
                             CREATE TABLE IF NOT EXISTS task_groups(
                                 id SERIAL PRIMARY KEY,
                                 name VARCHAR(50) NOT NULL COMMENT 'наименование группы',
-                                status BOOLEAN NOT NULL COMMENT 'активна ли еще группа' DEFAULT True
+                                is_active BOOLEAN NOT NULL COMMENT 'активна ли еще группа' DEFAULT True
                             );
                             COMMENT ON TABLE task_groups IS 'Таблица с группами под задачи';
                         """
@@ -60,8 +60,8 @@ async def main():
                         query="""
                             CREATE TABLE IF NOT EXISTS user_status_varieties(
                                 id SERIAL PRIMARY KEY,
-                                name VARCHAR(50) NOT NULL COMMENT 'наименование группы',
-                                desc TEXT COMMENT 'подробное описание группы'
+                                name VARCHAR(50) NOT NULL COMMENT 'наименование статуса',
+                                desc TEXT COMMENT 'подробное описание статуса'
                             );
                             COMMENT ON TABLE user_status_varieties IS 'Справочник статусов пользователей';
                         """

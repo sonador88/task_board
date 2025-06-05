@@ -124,8 +124,6 @@ async def main():
                             COMMENT ON TABLE task_process IS 'Таблица со статусами по поставленным задачам';
                         """
                     )
-
-
                 logger.info("Tables were successfully created")
     except Error as db_error:
         logger.exception("Database error: %s", db_error)
